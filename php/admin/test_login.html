@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Login</title>
+</head>
+<body>
+    <h2>Test Login API</h2>
+    
+    <input type="email" id="email" placeholder="Email" value="riskyrennee@gmail.com" style="width:300px;padding:10px;margin:5px;"><br>
+    <input type="password" id="password" placeholder="Password" value="password123" style="width:300px;padding:10px;margin:5px;"><br>
+    <button onclick="testLogin()">Test Login</button>
+    
+    <pre id="result" style="background:#f0f0f0;padding:20px;margin-top:20px;"></pre>
+
+    <script>
+    async function testLogin() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        const data = { email: email, password: password };
+        
+        document.getElementById('result').innerHTML = 'Sending: ' + JSON.stringify(data, null, 2) + '\n\nWaiting for response...';
+        
+        try {
+            const response = await fetch('login.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            
+            const result = await response.json();
+            document.getElementById('result').innerHTML = 'Response:\n' + JSON.stringify(result, null, 2);
+        } catch (error) {
+            document.getElementById('result').innerHTML = 'Error: ' + error.message;
+        }
+    }
+    </script>
+</body>
+</html>

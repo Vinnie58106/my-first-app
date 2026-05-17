@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Login Test</title>
+</head>
+<body>
+    <h2>Simple Login Test</h2>
+    
+    <input type="text" id="email" placeholder="Email" value="admin@greenfield.edu" style="width:300px;padding:10px;margin:5px;"><br>
+    <input type="password" id="password" placeholder="Password" value="admin123" style="width:300px;padding:10px;margin:5px;"><br>
+    <button onclick="testLogin()">Test Login</button>
+    
+    <div id="result" style="background:#f0f0f0;padding:20px;margin-top:20px;font-family:monospace;"></div>
+
+    <script>
+    async function testLogin() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        const resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = 'Sending request...';
+        
+        try {
+            const response = await fetch('login.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            });
+            
+            const text = await response.text();
+            resultDiv.innerHTML = 'Raw response: ' + text;
+            
+            // Try to parse as JSON
+            try {
+                const json = JSON.parse(text);
+                resultDiv.innerHTML = '✅ Success! JSON Response:\n' + JSON.stringify(json, null, 2);
+            } catch(e) {
+                resultDiv.innerHTML = '❌ Not valid JSON. Raw response:\n' + text;
+            }
+        } catch(error) {
+            resultDiv.innerHTML = 'Error: ' + error.message;
+        }
+    }
+    </script>
+</body>
+</html>
