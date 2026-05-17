@@ -1,0 +1,1056 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greenfield Institute | Course Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0b3d0b 0%, #1a5c1a 50%, #0d470d 100%);
+            min-height: 100vh;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        .bg-leaves {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-leaves span {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 0 50% 0 50%;
+            animation: float 25s infinite linear;
+        }
+
+        .navbar {
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(15px);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: #2e7d32;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 0 20px rgba(46,125,50,0.5);
+        }
+
+        .logo-text h1 {
+            font-size: 24px;
+            color: #ffffff;
+            letter-spacing: 2px;
+        }
+
+        .logo-text p {
+            font-size: 10px;
+            color: #a5d6a7;
+            letter-spacing: 3px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .nav-btn:hover {
+            background: #2e7d32;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(46,125,50,0.4);
+        }
+
+        .logout-btn {
+            background: rgba(220,53,69,0.2);
+            border: 1px solid rgba(220,53,69,0.5);
+        }
+
+        .logout-btn:hover {
+            background: #dc3545;
+            box-shadow: 0 5px 20px rgba(220,53,69,0.3);
+        }
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 6px 18px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50px;
+        }
+
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+            background: #2e7d32;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            color: white;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 30px;
+        }
+
+        .auth-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .glass-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 32px;
+            padding: 50px;
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .brand-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .brand h2 {
+            font-size: 28px;
+            color: white;
+        }
+
+        .brand p {
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .auth-toggle {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 35px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 60px;
+            padding: 5px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            color: rgba(255,255,255,0.6);
+            cursor: pointer;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .toggle-btn.active {
+            background: #2e7d32;
+            color: white;
+            box-shadow: 0 5px 15px rgba(46,125,50,0.4);
+        }
+
+        .input-field {
+            margin-bottom: 25px;
+        }
+
+        .input-field label {
+            display: block;
+            margin-bottom: 8px;
+            color: rgba(255,255,255,0.8);
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .input-field input, .input-field textarea, .input-field select {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 16px;
+            color: white;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .input-field input:focus, .input-field textarea:focus, .input-field select:focus {
+            outline: none;
+            border-color: #2e7d32;
+            background: rgba(255,255,255,0.15);
+        }
+
+        .input-field input::placeholder, .input-field textarea::placeholder {
+            color: rgba(255,255,255,0.3);
+        }
+
+        .btn-gradient {
+            width: 100%;
+            padding: 14px;
+            background: #2e7d32;
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-gradient:hover {
+            background: #1b5e20;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(46,125,50,0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #2e7d32;
+            color: #2e7d32;
+        }
+
+        .btn-outline:hover {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .demo-box {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 20px;
+        }
+
+        .demo-box p {
+            color: rgba(255,255,255,0.5);
+            font-size: 12px;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .demo-creds {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .demo-chip {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 30px;
+            font-size: 11px;
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .demo-chip:hover {
+            background: #2e7d32;
+        }
+
+        .page-header {
+            margin-bottom: 35px;
+        }
+
+        .page-header h2 {
+            font-size: 32px;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .search-section {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 60px;
+            color: white;
+            font-size: 15px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #2e7d32;
+        }
+
+        .stats-chip {
+            background: rgba(46,125,50,0.3);
+            padding: 12px 20px;
+            border-radius: 60px;
+            display: inline-block;
+            margin-top: 15px;
+            font-size: 13px;
+            color: #a5d6a7;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 25px;
+        }
+
+        .course-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 24px;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.4s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-8px);
+            border-color: #2e7d32;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .course-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            background: #2e7d32;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .course-card h3 {
+            font-size: 22px;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .course-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 15px 0;
+            padding: 12px 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .progress {
+            margin: 15px 0;
+        }
+
+        .progress-bar {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            height: 8px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: #2e7d32;
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.5s;
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn-register {
+            flex: 1;
+            padding: 12px;
+            background: #2e7d32;
+            border: none;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-register:hover {
+            background: #1b5e20;
+            transform: scale(1.02);
+        }
+
+        .btn-drop {
+            flex: 1;
+            padding: 12px;
+            background: rgba(220,53,69,0.2);
+            border: 1px solid rgba(220,53,69,0.5);
+            border-radius: 40px;
+            color: #dc3545;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-drop:hover {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-disabled {
+            flex: 1;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border: none;
+            border-radius: 40px;
+            color: rgba(255,255,255,0.3);
+            cursor: not-allowed;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .admin-tab {
+            padding: 12px 28px;
+            background: rgba(255,255,255,0.05);
+            border: none;
+            border-radius: 50px;
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .admin-tab.active {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .admin-panel {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 30px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 15px;
+            background: rgba(46,125,50,0.3);
+            color: white;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: rgba(255,255,255,0.8);
+        }
+
+        .profile-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 30px;
+            max-width: 500px;
+        }
+
+        .profile-row {
+            display: flex;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .profile-label {
+            width: 130px;
+            font-weight: 600;
+            color: #a5d6a7;
+        }
+
+        .profile-value {
+            flex: 1;
+            color: white;
+        }
+
+        .alert {
+            margin-top: 20px;
+            padding: 12px 20px;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: rgba(46,125,50,0.3);
+            border: 1px solid #2e7d32;
+            color: #a5d6a7;
+        }
+
+        .alert-error {
+            background: rgba(220,53,69,0.2);
+            border: 1px solid #dc3545;
+            color: #f8d7da;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 24px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        @media (max-width: 768px) {
+            .navbar { padding: 15px 20px; }
+            .container { padding: 20px; }
+            .courses-grid { grid-template-columns: 1fr; }
+            .glass-card { padding: 30px; margin: 16px; }
+            .page-header h2 { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-leaves" id="bgLeaves"></div>
+
+<?php if (!isset($_SESSION['user_id'])): ?>
+
+<div class="auth-wrapper">
+    <div class="glass-card">
+        <div class="brand">
+            <div class="brand-icon">🌿</div>
+            <h2>Greenfield Institute</h2>
+            <p>Course Registration Portal</p>
+        </div>
+        
+        <div class="auth-toggle">
+            <button class="toggle-btn active" onclick="switchTab('login')">Sign In</button>
+            <button class="toggle-btn" onclick="switchTab('register')">Create Account</button>
+        </div>
+        
+        <div id="loginTab">
+            <div class="input-field">
+                <label>Email Address</label>
+                <input type="email" id="loginEmail" placeholder="hello@greenfield.edu">
+            </div>
+            <div class="input-field">
+                <label>Password</label>
+                <input type="password" id="loginPassword" placeholder="••••••••">
+            </div>
+            <button class="btn-gradient" onclick="login()">Sign In →</button>
+            <div id="loginMessage" class="alert"></div>
+        </div>
+        
+        <div id="registerTab" style="display: none;">
+            <div class="input-field">
+                <label>Username</label>
+                <input type="text" id="regUsername" placeholder="johndoe">
+            </div>
+            <div class="input-field">
+                <label>Full Name</label>
+                <input type="text" id="regFullName" placeholder="John Doe">
+            </div>
+            <div class="input-field">
+                <label>Email</label>
+                <input type="email" id="regEmail" placeholder="hello@greenfield.edu">
+            </div>
+            <div class="input-field">
+                <label>Password (min 6 characters)</label>
+                <input type="password" id="regPassword" placeholder="Create password">
+            </div>
+            <div class="input-field">
+                <label>Confirm Password</label>
+                <input type="password" id="regConfirmPassword" placeholder="Confirm password">
+            </div>
+            <button class="btn-gradient" onclick="register()">Create Account →</button>
+            <div id="registerMessage" class="alert"></div>
+        </div>
+        
+        <div class="demo-box">
+            <p>🎭 Demo Credentials</p>
+            <div class="demo-creds">
+                <span class="demo-chip" onclick="fillDemo('admin@greenfield.edu', 'password123')">👑 Admin</span>
+                <span class="demo-chip" onclick="fillDemo('student@greenfield.edu', 'password123')">🎓 Student</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php else: ?>
+
+<nav class="navbar">
+    <div class="logo">
+        <div class="logo-icon">🌿</div>
+        <div class="logo-text">
+            <h1>Greenfield</h1>
+            <p>REGISTRATION PORTAL</p>
+        </div>
+    </div>
+    <div class="nav-menu">
+        <button class="nav-btn" onclick="showPage('courses')">📚 Courses</button>
+        <button class="nav-btn" onclick="showPage('mycourses')">📖 My Courses</button>
+        <button class="nav-btn" onclick="showPage('profile')">👤 Profile</button>
+        <?php if ($_SESSION['role'] === 'admin'): ?>
+        <button class="nav-btn" onclick="showPage('admin')">⚙️ Admin</button>
+        <?php endif; ?>
+        <div class="user-badge">
+            <div class="user-avatar"><?php echo strtoupper(substr($_SESSION['full_name'], 0, 1)); ?></div>
+            <span><?php echo htmlspecialchars($_SESSION['full_name']); ?></span>
+        </div>
+        <button class="nav-btn logout-btn" onclick="logout()">🚪</button>
+    </div>
+</nav>
+
+<div class="container">
+    <div id="coursesPage" class="page" style="display: block;">
+        <div class="page-header">
+            <h2>Available Courses</h2>
+            <p>Find and register for your next adventure</p>
+        </div>
+        <div class="search-section">
+            <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search by course name, code, or instructor..." onkeyup="loadCourses()">
+            <div class="stats-chip" id="courseStats"></div>
+        </div>
+        <div id="coursesList" class="courses-grid">
+            <div class="loading">🌿 Loading courses...</div>
+        </div>
+    </div>
+    
+    <div id="mycoursesPage" class="page" style="display: none;">
+        <div class="page-header">
+            <h2>My Enrollment</h2>
+            <p>Courses you're currently taking</p>
+        </div>
+        <div id="myCoursesList" class="courses-grid"></div>
+    </div>
+    
+    <div id="profilePage" class="page" style="display: none;">
+        <div class="page-header">
+            <h2>My Profile</h2>
+            <p>Your account information</p>
+        </div>
+        <div class="profile-card" id="profileInfo"></div>
+    </div>
+    
+    <?php if ($_SESSION['role'] === 'admin'): ?>
+    <div id="adminPage" class="page" style="display: none;">
+        <div class="page-header">
+            <h2>Admin Dashboard</h2>
+            <p>Manage courses and monitor registrations</p>
+        </div>
+        
+        <div class="admin-tabs">
+            <button class="admin-tab active" onclick="switchAdminTab('add')">➕ Create Course</button>
+            <button class="admin-tab" onclick="switchAdminTab('manage')">✏️ Manage Courses</button>
+            <button class="admin-tab" onclick="switchAdminTab('registrations')">👥 View Registrations</button>
+        </div>
+        
+        <div id="adminAddTab" class="admin-panel">
+            <h3 style="margin-bottom: 25px; color: white;">Create New Course</h3>
+            <div class="form-row">
+                <div class="input-field">
+                    <label>Course Code</label>
+                    <input type="text" id="courseCode" placeholder="CS401">
+                </div>
+                <div class="input-field">
+                    <label>Course Name</label>
+                    <input type="text" id="courseName" placeholder="Advanced Topics">
+                </div>
+            </div>
+            <div class="input-field">
+                <label>Description</label>
+                <textarea id="courseDesc" rows="3" placeholder="Course description..."></textarea>
+            </div>
+            <div class="form-row">
+                <div class="input-field">
+                    <label>Credits</label>
+                    <input type="number" id="credits" value="3">
+                </div>
+                <div class="input-field">
+                    <label>Instructor</label>
+                    <input type="text" id="instructor" placeholder="Professor name">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-field">
+                    <label>Capacity</label>
+                    <input type="number" id="capacity" value="30">
+                </div>
+                <div class="input-field">
+                    <label>Room</label>
+                    <input type="text" id="room" placeholder="Room number">
+                </div>
+            </div>
+            <div class="input-field">
+                <label>Schedule</label>
+                <input type="text" id="schedule" placeholder="Mon/Wed 2:00-3:30 PM">
+            </div>
+            <button class="btn-gradient" style="width: auto; padding: 12px 30px;" onclick="addCourse()">🌿 Create Course</button>
+            <div id="adminAddMessage" class="alert"></div>
+        </div>
+        
+        <div id="adminManageTab" class="admin-panel" style="display: none;">
+            <div id="adminCoursesList" class="courses-grid"></div>
+        </div>
+        
+        <div id="adminRegistrationsTab" class="admin-panel" style="display: none;">
+            <div id="registrationsList"></div>
+        </div>
+    </div>
+    <?php endif; ?>
+</div>
+<?php endif; ?>
+
+<script>
+    function createLeaves() {
+        const container = document.getElementById('bgLeaves');
+        for (let i = 0; i < 30; i++) {
+            const span = document.createElement('span');
+            const size = Math.random() * 80 + 20;
+            span.style.width = size + 'px';
+            span.style.height = size + 'px';
+            span.style.left = Math.random() * 100 + '%';
+            span.style.animationDuration = Math.random() * 20 + 10 + 's';
+            span.style.animationDelay = Math.random() * 5 + 's';
+            container.appendChild(span);
+        }
+    }
+    createLeaves();
+
+    let currentUserRole = '<?php echo $_SESSION['role'] ?? ''; ?>';
+
+    function switchTab(tab) {
+        const loginTab = document.getElementById('loginTab');
+        const registerTab = document.getElementById('registerTab');
+        const btns = document.querySelectorAll('.toggle-btn');
+        
+        if (tab === 'login') {
+            loginTab.style.display = 'block';
+            registerTab.style.display = 'none';
+            btns[0].classList.add('active');
+            btns[1].classList.remove('active');
+        } else {
+            loginTab.style.display = 'none';
+            registerTab.style.display = 'block';
+            btns[0].classList.remove('active');
+            btns[1].classList.add('active');
+        }
+    }
+
+    function fillDemo(email, password) {
+        document.getElementById('loginEmail').value = email;
+        document.getElementById('loginPassword').value = password;
+        const msg = document.getElementById('loginMessage');
+        msg.textContent = '✅ Demo credentials filled! Click Sign In.';
+        msg.className = 'alert alert-success show';
+        setTimeout(() => msg.classList.remove('show'), 3000);
+    }
+
+    async function login() {
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        const messageDiv = document.getElementById('loginMessage');
+        
+        if (!email || !password) {
+            showMessage(messageDiv, 'Please fill in all fields', 'error');
+            return;
+        }
+        
+        try {
+            const response = await fetch('php/login.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await response.json();
+            
+            if (data.success) {
+                showMessage(messageDiv, 'Login successful! Redirecting...', 'success');
+                setTimeout(() => window.location.reload(), 1000);
+            } else {
+                showMessage(messageDiv, data.message, 'error');
+            }
+        } catch (error) {
+            showMessage(messageDiv, 'Login failed. Try again.', 'error');
+        }
+    }
+
+    async function register() {
+        const username = document.getElementById('regUsername').value;
+        const fullName = document.getElementById('regFullName').value;
+        const email = document.getElementById('regEmail').value;
+        const password = document.getElementById('regPassword').value;
+        const confirmPassword = document.getElementById('regConfirmPassword').value;
+        const messageDiv = document.getElementById('registerMessage');
+        
+        if (!username || !fullName || !email || !password) {
+            showMessage(messageDiv, 'Please fill all fields', 'error');
+            return;
+        }
+        
+        if (password !== confirmPassword) {
+            showMessage(messageDiv, 'Passwords do not match', 'error');
+            return;
+        }
+        
+        if (password.length < 6) {
+            showMessage(messageDiv, 'Password must be at least 6 characters', 'error');
+            return;
+        }
+        
+        try {
+            const response = await fetch('php/register.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, full_name: fullName, email, password })
+            });
+            const data = await response.json();
+            
+            if (data.success) {
+                showMessage(messageDiv, data.message, 'success');
+                setTimeout(() => switchTab('login'), 2000);
+            } else {
+                showMessage(messageDiv, data.message, 'error');
+            }
+        } catch (error) {
+            showMessage(messageDiv, 'Registration failed', 'error');
+        }
+    }
+
+    function showPage(page) {
+        document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+        document.getElementById(page + 'Page').style.display = 'block';
+        
+        if (page === 'courses') loadCourses();
+        if (page === 'mycourses') loadMyCourses();
+        if (page === 'profile') loadProfile();
+        if (page === 'admin' && currentUserRole === 'admin') {
+            loadAdminCourses();
+            loadRegistrations();
+        }
+    }
+
+    async function loadCourses() {
+        const search = document.getElementById('searchInput')?.value || '';
+        const container = document.getElementById('coursesList');
+        container.innerHTML = '<div class="loading">🌿 Loading courses...</div>';
+        
+        try {
+            const response = await fetch(`php/get_courses.php?search=${encodeURIComponent(search)}`);
+            const courses = await response.json();
+            
+            if (!courses.length) {
+                container.innerHTML = '<div class="no-results">🔍 No courses found</div>';
+                document.getElementById('courseStats').innerHTML = '';
+                return;
+            }
+            
+            const totalSeats = courses.reduce((sum, c) => sum + (c.capacity - c.enrolled), 0);
+            document.getElementById('courseStats').innerHTML = `📊 ${courses.length} Courses Available | ${totalSeats} Seats Open`;
+            
+            container.innerHTML = courses.map(course => `
+                <div class="course-card">
+                    <span class="course-badge">${escapeHtml(course.course_code)}</span>
+                    <h3>${escapeHtml(course.course_name)}</h3>
+                    <p style="color: rgba(255,255,255,0.5); font-size: 14px; margin: 10px 0;">${escapeHtml(course.description || 'No description available')}</p>
+                    <div class="course-meta">
+                        <span class="meta-item">📚 ${course.credits} Credits</span>
+                        <span class="meta-item">👨‍🏫 ${escapeHtml(course.instructor)}</span>
+                        <span class="meta-item">🕒 ${escapeHtml(course.schedule)}</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${(course.enrolled / course.capacity) * 100}%"></div>
+                        </div>
+                        <div class="progress-stats">
+                            <span>🎯 ${course.enrolled} enrolled</span>
+                            <span>🎟️ ${course.capacity - course.enrolled} spots left</span>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        ${course.is_registered ? 
+                            '<button class="btn-disabled" disabled>✓ Registered</button>' :
+                            (course.is_full ? 
+                                '<button class="btn-disabled" disabled>📛 Full</button>' :
+                                `<button class="btn-register" onclick="registerCourse(${course.id})">✅ Register Now</button>`)
+                        }
+                    </div>
+                </div>
+            `).join('');
+        } catch (error) {
+            container.innerHTML = '<div class="no-results">⚠️ Failed to load courses</div>';
+        }
+    }
+
+    async function registerCourse(courseId) {
+        try {
+            const response = await fetch('php/register_course.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ course_id: courseId })
+            });
+            const data = await response.json();
+            alert(data.message);
+            if (data.success) {
+                loadCourses();
+                loadMyCourses();
+            }
+        } catch (error) {
+            alert('Registration failed');
+        }
+    }
+
+    async function loadMyCourses() {
+        const container = document.getElementById('myCoursesList');
+        container.innerHTML = '<div class="loading">📖 Loading your courses...</div>';
+        
+        try {
+            const response = await fetch('php/my_courses.php');
+            const courses = await response.json();
+            
+            if (!courses.length) {
+                container.innerHTML = '<div class="no-results">📭 You haven\'t registered for any courses yet</div>';
+                return;
+            }
+            
+            container.innerHTML = courses.map(course => `
+                <div class="course-card">
+                    <span class="course-badge">${escapeHtml(course.course_code)}</span>
+                    <h3>${escapeHtml(course.course_name)}</h3>
+                    <div class="course-meta">
+                        <span class="meta-item">👨‍🏫 ${escapeHtml(course.instructor)}</span>
+                        <span class="meta-item">🕒 ${escapeHtml(course.schedule)}</span>
+                        <span class="meta-item">📅 Registered: ${new Date(course.registration_date).toLocaleDateString()}</span>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn-drop" onclick="dropCourse(${course.id})">❌ Drop Course</button>
+                    </div>
+                </div>
+            `).join('');
+        } catch (error) {
+            container.innerHTML = '<div class="no-results">Failed to load your courses</div>';
+        }
+    }
+
+    async function dropCourse(courseId) {
+        if (!confirm('Are you sure you want to drop this course?')) return;
+        
+        try {
+            const response = await fetch('php/drop_course.php', {
+                method: 'POST
